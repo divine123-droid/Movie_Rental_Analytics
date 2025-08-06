@@ -1,0 +1,211 @@
+ERD
+
+
+[actor]       [film]         [category]
+   |            |                |
+   |            |                |
+   |         [film_category]     |
+   |__________/        \_________|
+        many-to-many
+
+[film] ──────< [inventory] >────── [store] (optional)
+
+[inventory] ──────< [rentat] (rental) >────── [customer]
+                                 |
+                             [payment]
+
+[customer] >── [address] >── [city] >── [country]
+
+[film] >── [language]
+
+
+DB Diagram
+
+Table actor {
+  actor_id int [pk]
+  first_name varchar
+  last_name varchar
+  last_update datetime
+}
+
+Table film {
+  film_id int [pk]
+  title varchar
+  description text
+  release_year int
+  language_id int [ref: > language.language_id]
+  rental_duration int
+  rental_rate decimal
+  replacement_cost decimal
+  rating varchar
+  last_update datetime
+}
+
+Table language {
+  language_id int [pk]
+  name varchar
+  last_update datetime
+}
+
+Table inventory {
+  inventory_id int [pk]
+  film_id int [ref: > film.film_id]
+  store_id int
+  last_update datetime
+}
+
+Table rentat {
+  rental_id int [pk]
+  rental_date datetime
+  inventory_id int [ref: > inventory.inventory_id]
+  customer_id int [ref: > customer.customer_id]
+  return_date datetime
+  staff_id int
+  last_update datetime
+}
+
+Table payment {
+  payment_id int [pk]
+  customer_id int [ref: > customer.customer_id]
+  rental_id int [ref: > rentat.rental_id]
+  amount decimal
+  payment_date datetime
+}
+
+Table customer {
+  customer_id int [pk]
+  store_id int
+  first_name varchar
+  last_name varchar
+  email varchar
+  address_id int [ref: > address.address_id]
+  active bool
+  create_date datetime
+  last_update datetime
+}
+
+Table address {
+  address_id int [pk]
+  address varchar
+  address2 varchar
+  district varchar
+  city_id int [ref: > city.city_id]
+  postal_code varchar
+  phone varchar
+  last_update datetime
+}
+
+Table city {
+  city_id int [pk]
+  city varchar
+  country_id int [ref: > country.country_id]
+  last_update datetime
+}
+
+Table country {
+  country_id int [pk]
+  country varchar
+  last_update datetime
+}
+
+Table category {
+  category_id int [pk]
+  name varchar
+  last_update datetime
+}
+
+Entity relationship Diagram
+
+ 1. actor
+Column Name	Data Type	Key	Notes
+actor_id	int	PK	Primary Key
+first_name	varchar		
+last_name	varchar		
+last_update	datetime
+
+2. film
+Column Name	Data Type	Key	Notes
+film_id	int	PK	Primary Key
+title	varchar		
+description	text		
+release_year	int		
+language_id	int	FK	→ language.language_id
+rental_duration	int		
+rental_rate	decimal		
+replacement_cost	decimal		
+rating	varchar		
+last_update	datetime		
+
+3. language
+Column Name	Data Type	Key	Notes
+language_id	int	PK	
+name	varchar		
+last_update	datetime		
+
+4. inventory
+Column Name	Data Type	Key	Notes
+inventory_id	int	PK	
+film_id	int	FK	→ film.film_id
+store_id	int		(Store table not provided)
+last_update	datetime		
+
+5. rentat (rental)
+Column Name	Data Type	Key	Notes
+rental_id	int	PK	
+rental_date	datetime		
+inventory_id	int	FK	→ inventory.inventory_id
+customer_id	int	FK	→ customer.customer_id
+return_date	datetime		
+staff_id	int		(Staff table not provided)
+last_update	datetime		
+
+6. payment
+Column Name	Data Type	Key	Notes
+payment_id	int	PK	
+customer_id	int	FK	→ customer.customer_id
+rental_id	int	FK	→ rentat.rental_id
+amount	decimal		
+payment_date	datetime		
+
+7. customer
+Column Name	Data Type	Key	Notes
+customer_id	int	PK	
+store_id	int		(Store table not provided)
+first_name	varchar		
+last_name	varchar		
+email	varchar		
+address_id	int	FK	→ address.address_id
+active	bool		
+create_date	datetime		
+last_update	datetime		
+
+8. address
+Column Name	Data Type	Key	Notes
+address_id	int	PK	
+address	varchar		
+address2	varchar		
+district	varchar		
+city_id	int	FK	→ city.city_id
+postal_code	varchar		
+phone	varchar		
+last_update	datetime		
+
+9. city
+Column Name	Data Type	Key	Notes
+city_id	int	PK	
+city	varchar		
+country_id	int	FK	→ country.country_id
+last_update	datetime		
+
+10. country
+Column Name	Data Type	Key	Notes
+country_id	int	PK	
+country	varchar		
+last_update	datetime		
+
+11. category
+Column Name	Data Type	Key	Notes
+category_id	int	PK	
+name	varchar		
+last_update	datetime		
+
